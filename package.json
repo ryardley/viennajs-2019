@@ -1,0 +1,18 @@
+{
+  "name": "pdsl-presentation",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "mdx-deck notes.mdx"
+  },
+  "devDependencies": {
+    "mdx-deck": "^3.0.7",
+    "react-syntax-highlighter": "^11.0.2"
+  },
+  "dependencies": {
+    "@material-ui/core": "^4.3.2",
+    "styled-components": "^4.3.2",
+    "styled-icons": "^8.3.0"
+  }
+}

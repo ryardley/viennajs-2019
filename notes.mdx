@@ -1,0 +1,498 @@
+import { themes, Notes } from "mdx-deck";
+import { Layout } from "./components";
+
+import styled from "styled-components";
+import { Twitter } from "styled-icons/boxicons-logos/Twitter";
+import { LinkedinSquare } from "styled-icons/boxicons-logos/LinkedinSquare";
+import { Github } from "styled-icons/boxicons-logos/Github";
+
+import { N, B, Book, Code } from "./components";
+export const theme = {
+  ...themes.future,
+  colors: { ...themes.dark.colors, background: "rgb(35, 36, 31)" }
+};
+
+<Layout
+  header={
+    <h1 style={{ textTransform: "uppercase", fontSize: 80 }}>
+      Composing Better Predicates
+    </h1>
+  }
+  aside={
+    <div>
+      <h3 style={{ fontSize: 40 }}>Rudi Yardley</h3>
+      <p style={{ fontSize: 25 }}>Melbourne, Australia</p>
+      <div style={{ paddingTop: 0, width: 300 }}>
+        <div style={{ fontSize: 25, marginBottom: 5 }}>
+          <Github size={40} />
+          &nbsp; @ ryardley
+        </div>
+        <div style={{ fontSize: 25, marginBottom: 5 }}>
+          <Twitter size={40} />
+          &nbsp; @ rudiyardley
+        </div>
+        <div style={{ fontSize: 25, marginBottom: 5 }}>
+          <LinkedinSquare size={40} />
+          &nbsp; @ rudiyardley
+        </div>
+      </div>
+    </div>
+  }
+>
+  <div style={{ marginTop: 55 }}>
+    <p style={{ fontSize: 25 }}>Freelance Fullstack Software Engineer</p>
+    <p style={{ fontSize: 20 }}>TypeScript, JavaScript, React, Node</p>
+    <p style={{ fontSize: 20 }}>
+      Seek, Marketplacer, FTWK, Blockbid, many more over the last 19 years
+    </p>
+    <p style={{ fontSize: 20 }}>
+      Currently travelling Europe focussing on blogging, open source and
+      personal projects
+    </p>
+  </div>
+</Layout>
+
+---
+
+<Code>{`x !== null && x !== undefined`}</Code>
+
+---
+
+#### What is this?
+
+<Code>{`
+x !== null && x !== undefined
+`}</Code>
+
+---
+
+#### Predicate expression
+
+<Code>{`
+x !== null && x !== undefined
+`}</Code>
+
+---
+
+### Predicate expression
+
+<Code>{`
+x !== null && x !== undefined
+`}</Code>
+
+A predicate states, affirms, or asserts something about a subject.
+
+---
+
+<Code>{`if (x !== null && x !== undefined) {
+  doSomething(x);
+}`}</Code>
+
+---
+
+### Shortcut?
+
+<Code>{`
+if (x) {
+  doSomething(x);
+}
+`}</Code>
+
+---
+
+### Shortcut?
+
+<Code>{`
+if (x) {
+  doSomething(x);
+}
+`}</Code>
+
+What if x is 0 or false?
+
+---
+
+### No longer correct
+
+<Code>{`
+(x) vs (x !== null || x !== undefined)
+`}</Code>
+
+---
+
+### Why do we do this?
+
+<Code>{`
+(x) vs (x !== null || x !== undefined)
+`}</Code>
+
+---
+
+### Preciates in JS are not concise enough
+
+---
+
+### Clear?
+
+<Code>{`
+input && typeof input.username === "string" && 
+!input.username.match(/[^0-9A-Z]/) && 
+input.username.length >= 4 && 
+input.username.length <= 8 && 
+typeof input.password === "string" && 
+input.password.match(/[^a-zA-Z0-9]/) && 
+input.password.length > 8 && 
+input.age > 17;
+`}</Code>
+
+---
+
+### Concise?
+
+<Code>{`input && typeof input.username === "string" && 
+!input.username.match(/[^0-9A-Z]/) && 
+input.username.length >= 4 && 
+input.username.length <= 8 && 
+typeof input.password === "string" && 
+input.password.match(/[^a-zA-Z0-9]/) && 
+input.password.length > 8 && 
+input.age > 17;
+`}</Code>
+
+---
+
+### Predicate function
+
+<Code language="typescript">{`type PredicateFn = (x: any) => boolean;`}</Code>
+
+---
+
+### Predicate function
+
+<Code language="typescript">{`const isNotNil = (x:any) => {
+  return x !== null && x !== undefined;
+}`}</Code>
+
+---
+
+### Predicate function
+
+<Code language="typescript">{`if(isNotNil(x)) {
+  doSomething(x);
+}`}</Code>
+
+---
+
+### Complex predicate function
+
+<Code language="typescript">{`const isUser = (input) => {
+  return input && 
+    typeof input.username === "string" && 
+    !input.username.match(/[^0-9A-Z]/) && 
+    input.username.length >= 4 && 
+    input.username.length <= 8 && 
+    typeof input.password === "string" && 
+    input.password.match(/[^a-zA-Z0-9]/) && 
+    input.password.length > 8 && 
+    input.age > 17;
+}`}</Code>
+
+---
+
+### Complex predicate function
+
+- Hard to understand intent
+- Cant understand it immediately
+- Not concise due to JS
+- Needs to be well tested
+
+---
+
+### Can we do better?
+
+---
+
+<Notes>Let's try with notNil - where is the essential information?</Notes>
+
+### What is the essential information?
+
+<Code>{`
+x => x !== null && x !== undefined;
+`}</Code>
+
+---
+
+### What is the essential information?
+
+<Code>{`
+!== null && !== undefined
+`}</Code>
+
+---
+
+### What is the essential information?
+
+<Code>{`!null && !undefined;`}</Code>
+
+---
+
+### What is the essential information?
+
+<Code>{`!( null || undefined );`}</Code>
+
+---
+
+<Notes>
+  By removing the subject and some language boilerplate it is possible to define
+  a predicate in a more precise way.
+</Notes>
+
+### Boiled down
+
+<Code>{`
+!( null | undefined );
+`}</Code>
+
+---
+
+Wouldn't it be nice...
+
+<Code>{`const notNil = !( null | undefined ); // 🤔\n\nnotNil(x);`}</Code>
+
+---
+
+Syntax?
+
+<Code>{`const notNil = p\`!( null | undefined );\`\n\nnotNil(x);`}</Code>
+
+---
+
+<Notes>Well actually thats exactly what PDSL does!</Notes>
+
+<Code>
+  {
+    '// 😊 PDSL\nimport p from "pdsl";\n\nconst notNil = p`!( null | undefined )`;\n\nnotNil(x);\n'
+  }
+</Code>
+
+---
+
+## PDSL
+
+Helps write predicates expressively.
+
+<Notes>
+  <li>Is a new open source project I am involved in</li>
+  <li>Provides a shorthand for composing predicate functions</li>
+</Notes>
+
+---
+
+<Code>
+  {
+    'import p from "pdsl";\n\nconst hasName = p`{ name }`;\n\nhasName({ name: "Nadia" });'
+  }
+</Code>
+
+---
+
+<Code language="typescript">{`const isUser = (input) => {
+  return input && 
+    typeof input.username === "string" && 
+    !input.username.match(/[^0-9A-Z]/) && 
+    input.username.length >= 4 && 
+    input.username.length <= 8 && 
+    typeof input.password === "string" && 
+    input.password.match(/[^a-zA-Z0-9]/) && 
+    input.password.length > 8 && 
+    input.age > 17;
+}`}</Code>
+
+---
+
+<Code>
+{`const isUser = p\`{\n
+  username: String 
+    & !\${/[0-9A-Z]/} 
+    & { length: 4..8 },\n
+  password: String
+    & !\${/[a-zA-Z0-9]/} 
+    & { length: > 8 },\n
+  age: > 17
+}\`;`}
+
+</Code>
+
+---
+
+### Primitive matching
+
+<Code>
+  {`const isNumeric = p\`Number\`;
+const isBoolean = p\`Boolean\`;
+const isString = p\`String\`;
+const isObject = p\`Object\`;
+const isSymbol = p\`Symbol\`;
+const isFunction = p\`Function\`;
+const isArray = p\`Array\`;`}
+</Code>
+
+---
+
+### Range comparison
+
+<Code>{`
+const isTeenager = p\`13..19\`;
+isTeenager(1); // true
+isTeenager(5); // true
+isTeenager(10); // true
+isTeenager(11); // false
+`}</Code>
+
+---
+
+### Boolean operators
+
+<Code>{`
+const successOrFailure = p\`{
+  successMsg: String
+} | {
+  errorCode: Number,
+  message: String
+}\`;
+`}</Code>
+
+---
+
+### Composable
+
+<Code size={30}>{`
+const validUsername = p\`String 
+  & !\${/[0-9]/} 
+  & !\${/[A-Z]/} 
+  & { length: 4..8 }\`;\n
+const validPassword = p\`String 
+  & \${/[^a-za-z0-9]/} 
+  & { length: > 8 }\`;\n
+const isValidUser = p\`{ 
+  username: \${validUsername}, 
+  password: \${validPassword}, 
+  age: > 17 
+}\`;
+`}</Code>
+
+---
+
+### TypeScript compatible
+
+<Code size={30} language="typescript">{`type User = {
+  name: string;
+  password: string;
+};\n
+// pass in User
+const isUser = p<User>\`{
+  name: String & { length: 3..8 },
+  password: String & { length: > 5 }
+}\`;\n
+if(isUser(user)) {
+  return user.name; // compiler is happy 
+}`}</Code>
+
+---
+
+### Reference equality
+
+<Code>{`
+const isTrue = p\`true\`; // value === true;
+const isFalse = p\`false\`; // value === false;
+const isNine = p\`9\`; // value === 9;
+const isRupert = p\`"Rupert"\`; // value === "Rupert";
+`}</Code>
+
+---
+
+### Empty comparisons
+
+<Code>{`
+const isEmptyArray = p\`[]\`;
+const isEmptyObject = p\`{}\`;
+const isEmptyString = p\`""\`;
+const isUndefined = p\`undefined\`;
+const isNull = p\`null\`;
+`}</Code>
+
+---
+
+### Array contains
+
+<Code>{`
+const isArrayWith7AndFoo = p\`[7, "foo"]\`;\n
+isArrayWith7AndFoo([1,2,3]); // false
+isArrayWith7AndFoo([1,2,3,7,"foo"]); // true
+`}</Code>
+
+---
+
+### PDSL Syntax influenced by
+
+- JavaScript
+- Flow
+- Styled components
+- Ruby
+
+---
+
+### PDSL Roadmap
+
+- Babel plugin - performance!
+- Syntax highlighting
+- Extracting errors for form validation
+- Help with syntax design
+
+---
+
+### PDSL on github
+
+https://github.com/ryardley/pdsl
+
+- Please submit issues
+- PRs become contibutors
+- Have some influence!
+- Vote of what is important
+
+---
+
+<Layout
+  header={
+    <>
+      <h1 style={{ textTransform: "uppercase", fontSize: 80 }}>THANK YOU</h1>
+      <p style={{ fontSize: 40 }}>https://github.com/ryardley/pdsl</p>
+    </>
+  }
+  aside={
+    <div>
+      <h3 style={{ fontSize: 40 }}>Rudi Yardley</h3>
+      <p style={{ fontSize: 25 }}>Melbourne, Australia</p>
+      <div style={{ paddingTop: 0, width: 300 }}>
+        <div style={{ fontSize: 25, marginBottom: 5 }}>
+          <Github size={40} />
+          &nbsp; @ ryardley
+        </div>
+        <div style={{ fontSize: 25, marginBottom: 5 }}>
+          <Twitter size={40} />
+          &nbsp; @ rudiyardley
+        </div>
+        <div style={{ fontSize: 25, marginBottom: 5 }}>
+          <LinkedinSquare size={40} />
+          &nbsp; @ rudiyardley
+        </div>
+      </div>
+    </div>
+  }
+>
+  <div style={{ marginTop: 55 }}>
+    <p style={{ fontSize: 30 }}>Fullstack Engineer</p>
+    <p style={{ fontSize: 25 }}>TypeScript, JavaScript, React & Node</p>
+    <p style={{ fontSize: 20 }}>Talk to me if you need help with anything</p>
+  </div>
+</Layout>
