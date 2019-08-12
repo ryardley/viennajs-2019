@@ -134,8 +134,7 @@ What if x is 0 or false?
 
 ### Clear?
 
-<Code>{`
-input && typeof input.username === "string" && 
+<Code>{`input && typeof input.username === "string" && 
 !input.username.match(/[^0-9A-Z]/) && 
 input.username.length >= 4 && 
 input.username.length <= 8 && 
@@ -277,9 +276,12 @@ Syntax?
 
 ---
 
-## PDSL
+<img
+  src="data:image/png;base64,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"
+  alt=""
+/>
 
-Helps write predicates expressively.
+<p style={{fontSize: 30}}>write expressive predicates.</p>
 
 <Notes>
   <li>Is a new open source project I am involved in</li>
@@ -292,6 +294,18 @@ Helps write predicates expressively.
   {
     'import p from "pdsl";\n\nconst hasName = p`{ name }`;\n\nhasName({ name: "Nadia" });'
   }
+</Code>
+
+---
+
+<Code size={35}>
+  {`import p from "pdsl";\n
+const isSoftwareCreator = p\`{
+  name: string,
+  age: > 16,
+  occupation: "Engineer" | "Designer" | "Project Manager"
+}\`;\n
+isSoftwareCreator(someone); // true | false'`}
 </Code>
 
 ---
@@ -311,11 +325,11 @@ Helps write predicates expressively.
 ---
 
 <Code>
-{`const isUser = p\`{\n
-  username: String 
+{`const isUser = p\`{
+  username: string 
     & !\${/[0-9A-Z]/} 
     & { length: 4..8 },\n
-  password: String
+  password: string
     & !\${/[a-zA-Z0-9]/} 
     & { length: > 8 },\n
   age: > 17
@@ -328,13 +342,13 @@ Helps write predicates expressively.
 ### Primitive matching
 
 <Code>
-  {`const isNumeric = p\`Number\`;
-const isBoolean = p\`Boolean\`;
-const isString = p\`String\`;
-const isObject = p\`Object\`;
-const isSymbol = p\`Symbol\`;
-const isFunction = p\`Function\`;
-const isArray = p\`Array\`;`}
+  {`const isNumeric = p\`number\`;
+const isBoolean = p\`boolean\`;
+const isString = p\`string\`;
+const isSymbol = p\`symbol\`;
+const isArray = p\`array\`;
+const isObject = p\`\${Object}\`;
+const isFunction = p\`\${Function}\`;`}
 </Code>
 
 ---
@@ -342,7 +356,7 @@ const isArray = p\`Array\`;`}
 ### Range comparison
 
 <Code>{`
-const isTeenager = p\`13..19\`;
+const isTeenager = p\`13..19\`;\n
 isTeenager(1); // true
 isTeenager(5); // true
 isTeenager(10); // true
@@ -355,10 +369,10 @@ isTeenager(11); // false
 
 <Code>{`
 const successOrFailure = p\`{
-  successMsg: String
+  successMsg: string
 } | {
-  errorCode: Number,
-  message: String
+  errorCode: number,
+  message: string
 }\`;
 `}</Code>
 
@@ -367,11 +381,11 @@ const successOrFailure = p\`{
 ### Composable
 
 <Code size={30}>{`
-const validUsername = p\`String 
+const validUsername = p\`string 
   & !\${/[0-9]/} 
   & !\${/[A-Z]/} 
   & { length: 4..8 }\`;\n
-const validPassword = p\`String 
+const validPassword = p\`string 
   & \${/[^a-za-z0-9]/} 
   & { length: > 8 }\`;\n
 const isValidUser = p\`{ 
@@ -391,8 +405,8 @@ const isValidUser = p\`{
 };\n
 // pass in User
 const isUser = p<User>\`{
-  name: String & { length: 3..8 },
-  password: String & { length: > 5 }
+  name: string & { length: 3..8 },
+  password: string & { length: > 5 }
 }\`;\n
 if(isUser(user)) {
   return user.name; // compiler is happy 
@@ -436,9 +450,14 @@ isArrayWith7AndFoo([1,2,3,7,"foo"]); // true
 ### PDSL Syntax influenced by
 
 - JavaScript
+- TypeScript
 - Flow
 - Styled components
 - Ruby
+
+---
+
+### ❤ your input
 
 ---
 
@@ -447,7 +466,15 @@ isArrayWith7AndFoo([1,2,3,7,"foo"]); // true
 - Babel plugin - performance!
 - Syntax highlighting
 - Extracting errors for form validation
-- Help with syntax design
+- New Syntax
+
+<Notes>
+  <ul>
+    <li>Error Validations</li>
+    <li>Optional Props</li>
+    <li>Exact Matching</li>
+  </ul>
+</Notes>
 
 ---
 
@@ -455,10 +482,21 @@ isArrayWith7AndFoo([1,2,3,7,"foo"]); // true
 
 https://github.com/ryardley/pdsl
 
-- Please submit issues
-- PRs become contibutors
-- Have some influence!
-- Vote of what is important
+<div>
+  <div>❤ Input</div>
+  <div>❤ Issues</div>
+  <div>❤ PRs</div>
+</div>
+
+---
+
+### Talk to me
+
+- PDSL
+- React / Node / TypeScript / JavaScript
+- Senior Fullstack Engineer (19 yrs)
+- Tutoring
+- Your project
 
 ---
 
