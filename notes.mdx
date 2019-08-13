@@ -56,6 +56,12 @@ export const theme = {
 
 <Code>{`x !== null && x !== undefined`}</Code>
 
+<Notes>
+  <li>Anyone like doing this?</li>
+  <li>Anyone refuse to do this?</li>
+  <li>...more on that later</li>
+</Notes>
+
 ---
 
 #### What is this?
@@ -63,6 +69,8 @@ export const theme = {
 <Code>{`
 x !== null && x !== undefined
 `}</Code>
+
+<Notes>Ask audience: expression</Notes>
 
 ---
 
@@ -132,7 +140,9 @@ What if x is 0 or false?
 
 ---
 
-### Clear?
+### Being concise is important
+
+---
 
 <Code>{`input && typeof input.username === "string" && 
 !input.username.match(/[^0-9A-Z]/) && 
@@ -146,7 +156,21 @@ input.age > 17;
 
 ---
 
-### Concise?
+### Concise? 🤔
+
+<Code>{`input && typeof input.username === "string" && 
+!input.username.match(/[^0-9A-Z]/) && 
+input.username.length >= 4 && 
+input.username.length <= 8 && 
+typeof input.password === "string" && 
+input.password.match(/[^a-zA-Z0-9]/) && 
+input.password.length > 8 && 
+input.age > 17;
+`}</Code>
+
+---
+
+### There are solutions...
 
 <Code>{`input && typeof input.username === "string" && 
 !input.username.match(/[^0-9A-Z]/) && 
@@ -196,6 +220,26 @@ input.age > 17;
     input.age > 17;
 }`}</Code>
 
+<Notes>This is great because you get tokenisation</Notes>
+
+---
+
+### Complex predicate function 🤔
+
+<Code language="typescript">{`const isUser = (input) => {
+  return input && 
+    typeof input.username === "string" && 
+    !input.username.match(/[^0-9A-Z]/) && 
+    input.username.length >= 4 && 
+    input.username.length <= 8 && 
+    typeof input.password === "string" && 
+    input.password.match(/[^a-zA-Z0-9]/) && 
+    input.password.length > 8 && 
+    input.age > 17;
+}`}</Code>
+
+<Notes>This is great because you get tokenisation</Notes>
+
 ---
 
 ### Complex predicate function
@@ -208,6 +252,10 @@ input.age > 17;
 ---
 
 ### Can we do better?
+
+---
+
+### Boil it down
 
 ---
 
@@ -231,13 +279,13 @@ x => x !== null && x !== undefined;
 
 ### What is the essential information?
 
-<Code>{`!null && !undefined;`}</Code>
+<Code>{`!null && !undefined`}</Code>
 
 ---
 
 ### What is the essential information?
 
-<Code>{`!( null || undefined );`}</Code>
+<Code>{`!( null || undefined )`}</Code>
 
 ---
 
@@ -249,7 +297,7 @@ x => x !== null && x !== undefined;
 ### Boiled down
 
 <Code>{`
-!( null | undefined );
+!( null | undefined )
 `}</Code>
 
 ---
@@ -257,22 +305,6 @@ x => x !== null && x !== undefined;
 Wouldn't it be nice...
 
 <Code>{`const notNil = !( null | undefined ); // 🤔\n\nnotNil(x);`}</Code>
-
----
-
-Syntax?
-
-<Code>{`const notNil = p\`!( null | undefined );\`\n\nnotNil(x);`}</Code>
-
----
-
-<Notes>Well actually thats exactly what PDSL does!</Notes>
-
-<Code>
-  {
-    '// 😊 PDSL\nimport p from "pdsl";\n\nconst notNil = p`!( null | undefined )`;\n\nnotNil(x);\n'
-  }
-</Code>
 
 ---
 
@@ -292,19 +324,31 @@ Syntax?
 
 <Code>
   {
-    'import p from "pdsl";\n\nconst hasName = p`{ name }`;\n\nhasName({ name: "Nadia" });'
+    '// 😊 PDSL\nimport p from "pdsl";\n\nconst notNil = p`!( null | undefined )`;\n\nnotNil(x);\n'
   }
+</Code>
+
+---
+
+<Code>
+  {`import p from "pdsl";\n\nconst hasName = p\`
+  { 
+    name 
+  }
+\`;\n\nhasName({ name: "Nadia" });`}
 </Code>
 
 ---
 
 <Code size={35}>
   {`import p from "pdsl";\n
-const isSoftwareCreator = p\`{
-  name: string,
-  age: > 16,
-  occupation: "Engineer" | "Designer" | "Project Manager"
-}\`;\n
+const isSoftwareCreator = p\`
+  {
+    name: string,
+    age: > 16,
+    occupation: "Engineer" | "Designer" | "Project Manager"
+  }
+\`;\n
 isSoftwareCreator(someone); // true | false'`}
 </Code>
 
@@ -336,6 +380,42 @@ isSoftwareCreator(someone); // true | false'`}
 }\`;`}
 
 </Code>
+
+---
+
+### Composable
+
+<Code size={30}>{`
+const validUsername = p\`string 
+  & !\${/[0-9]/} 
+  & !\${/[A-Z]/} 
+  & { length: 4..8 }\`;\n
+const validPassword = p\`string 
+  & \${/[^a-za-z0-9]/} 
+  & { length: > 8 }\`;\n
+const isValidUser = p\`{ 
+  username: \${validUsername}, 
+  password: \${validPassword}, 
+  age: > 17 
+}\`;
+`}</Code>
+
+---
+
+### TypeScript compatible
+
+<Code size={30} language="typescript">{`type User = {
+  name: string;
+  password: string;
+};\n
+// pass in User
+const isUser = p<User>\`{
+  name: string & { length: 3..8 },
+  password: string & { length: > 5 }
+}\`;\n
+if(isUser(user)) {
+  return user.name; // compiler is happy 
+}`}</Code>
 
 ---
 
@@ -375,42 +455,6 @@ const successOrFailure = p\`{
   message: string
 }\`;
 `}</Code>
-
----
-
-### Composable
-
-<Code size={30}>{`
-const validUsername = p\`string 
-  & !\${/[0-9]/} 
-  & !\${/[A-Z]/} 
-  & { length: 4..8 }\`;\n
-const validPassword = p\`string 
-  & \${/[^a-za-z0-9]/} 
-  & { length: > 8 }\`;\n
-const isValidUser = p\`{ 
-  username: \${validUsername}, 
-  password: \${validPassword}, 
-  age: > 17 
-}\`;
-`}</Code>
-
----
-
-### TypeScript compatible
-
-<Code size={30} language="typescript">{`type User = {
-  name: string;
-  password: string;
-};\n
-// pass in User
-const isUser = p<User>\`{
-  name: string & { length: 3..8 },
-  password: string & { length: > 5 }
-}\`;\n
-if(isUser(user)) {
-  return user.name; // compiler is happy 
-}`}</Code>
 
 ---
 
@@ -457,6 +501,10 @@ isArrayWith7AndFoo([1,2,3,7,"foo"]); // true
 
 ---
 
+### YOU
+
+---
+
 ### ❤ your input
 
 ---
@@ -478,7 +526,7 @@ isArrayWith7AndFoo([1,2,3,7,"foo"]); // true
 
 ---
 
-### PDSL on github
+### Follow PDSL on github
 
 https://github.com/ryardley/pdsl
 
@@ -486,6 +534,7 @@ https://github.com/ryardley/pdsl
   <div>❤ Input</div>
   <div>❤ Issues</div>
   <div>❤ PRs</div>
+  <div>❤ Stars</div>
 </div>
 
 ---
