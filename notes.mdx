@@ -98,6 +98,10 @@ A predicate states, affirms, or asserts something about a subject.
 
 ---
 
+### Rudi is lazy
+
+---
+
 ### Shortcut?
 
 <Code>{`
@@ -116,7 +120,7 @@ if (x) {
 }
 `}</Code>
 
-What if x is 0 or false?
+What if x is 0, false or ""?
 
 ---
 
@@ -385,7 +389,7 @@ isSoftwareCreator(someone); // true | false'`}
 
 ### Composable
 
-<Code size={30}>{`
+<Code size={35}>{`
 const validUsername = p\`string 
   & !\${/[0-9]/} 
   & !\${/[A-Z]/} 
@@ -491,6 +495,47 @@ isArrayWith7AndFoo([1,2,3,7,"foo"]); // true
 
 ---
 
+### Helper functions
+
+<Code>{`
+import { 
+  and, 
+  or,
+  holds, 
+  btw, 
+  gt, 
+  // ...
+} from "pdsl/helpers";\n
+`}</Code>
+
+---
+
+### Helper functions
+
+<div style={{fontSize: 20}}>
+
+| Helper                                                     | Description                                 | PDSL Operator          |
+| ---------------------------------------------------------- | ------------------------------------------- | ---------------------- |
+| [and](https://ryardley.github.io/pdsl/global.html#and)     | Logical AND                                 | `a & b` or `a && b`    |
+| [btw](https://ryardley.github.io/pdsl/global.html#btw)     | Between                                     | `10 < < 100`           |
+| [btwe](https://ryardley.github.io/pdsl/global.html#btwe)   | Between or equals                           | `10..100`              |
+| [deep](https://ryardley.github.io/pdsl/global.html#deep)   | Deep equality                               | N/A                    |
+| [gt](https://ryardley.github.io/pdsl/global.html#gt)       | Greater than                                | `> 5`                  |
+| [gte](https://ryardley.github.io/pdsl/global.html#gte)     | Greater than or equals                      | `>= 5`                 |
+| [holds](https://ryardley.github.io/pdsl/global.html#holds) | Array holds input                           | `[4,3]`                |
+| [lt](https://ryardley.github.io/pdsl/global.html#lt)       | Less than                                   | `< 5`                  |
+| [lte](https://ryardley.github.io/pdsl/global.html#lte)     | Less than equals                            | `<= 5`                 |
+| [not](https://ryardley.github.io/pdsl/global.html#not)     | Logical NOT                                 | `!6`                   |
+| [or](https://ryardley.github.io/pdsl/global.html#or)       | Logical OR                                  | `a \| b` or `a \|\| b` |
+| [pred](https://ryardley.github.io/pdsl/global.html#pred)   | Select the correct predicate based on input | `${myVal}`             |
+| [prim](https://ryardley.github.io/pdsl/global.html#prim)   | Primative typeof checking                   | `Array` etc.           |
+| [regx](https://ryardley.github.io/pdsl/global.html#regx)   | Regular expression predicate                | `${/^foo/}`            |
+| [val](https://ryardley.github.io/pdsl/global.html#val)     | Strict equality                             | N/A                    |
+
+</div>
+
+---
+
 ### PDSL Syntax influenced by
 
 - JavaScript
@@ -509,20 +554,12 @@ isArrayWith7AndFoo([1,2,3,7,"foo"]); // true
 
 ---
 
-### PDSL Roadmap
+### PDSL is young
 
-- Babel plugin - performance!
-- Syntax highlighting
-- Extracting errors for form validation
-- New Syntax
-
-<Notes>
-  <ul>
-    <li>Error Validations</li>
-    <li>Optional Props</li>
-    <li>Exact Matching</li>
-  </ul>
-</Notes>
+- Performance coming soon via babel plugin
+- Synatx highlighting and autosuggest in Roadmap
+- Not all Syntax is defined (Issues and PRs accepted)
+- Validation errors soon
 
 ---
 
@@ -536,16 +573,6 @@ https://github.com/ryardley/pdsl
   <div>❤ PRs</div>
   <div>❤ Stars</div>
 </div>
-
----
-
-### Talk to me
-
-- PDSL
-- React / Node / TypeScript / JavaScript
-- Senior Fullstack Engineer (19 yrs)
-- Tutoring
-- Your project
 
 ---
 
