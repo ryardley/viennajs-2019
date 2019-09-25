@@ -127,7 +127,7 @@ What if x is 0, false or ""?
 ### No longer correct
 
 <Code>{`
-(x) vs (x !== null || x !== undefined)
+(x) vs (x !== null && x !== undefined)
 `}</Code>
 
 ---
@@ -135,12 +135,12 @@ What if x is 0, false or ""?
 ### Why do we do this?
 
 <Code>{`
-(x) vs (x !== null || x !== undefined)
+(x) vs (x !== null && x !== undefined)
 `}</Code>
 
 ---
 
-### Preciates in JS are not concise enough
+#### Predicates in JS are not concise enough
 
 ---
 
@@ -335,12 +335,12 @@ Wouldn't it be nice...
 ---
 
 <Code>
-  {`import p from "pdsl";\n\nconst hasName = p\`
-  { 
-    name 
-  }
-\`;\n\nhasName({ name: "Nadia" });`}
+  {`import p from "pdsl";\n\nconst hasName = p\`{ name }\`;\n\nhasName({ name: "Nadia" });`}
 </Code>
+
+<Notes>
+  <li>PDSL converts a p-expression to a predicate function</li>
+</Notes>
 
 ---
 
@@ -564,10 +564,31 @@ import {
 
 ### PDSL is young
 
-- First cut has loose matching - moving to exact matching soon
-- Synatx highlighting and autosuggest
+- Syntax highlighting and autosuggest
 - Not all Syntax is defined (Issues and PRs accepted)
-- Validation errors soon
+- Moving to exact matching soon
+- Validation errors soon for use in form libraries
+
+---
+
+### Soon: Exact matching
+
+<Code
+  size={25}
+>{`p\`[ *, *, string, ... ]\`(\n  [1,null,'two', 3]\n); // true\n\np\`{ age: number, name: string, ... }\`(\n  {name:'foo', age: 12, color: 'black'}\n); // true\n\np\`{ age: number, name: string }\`(\n  {name:'foo', age: 12, color: 'black'}\n); // false`}</Code>
+
+---
+
+### Soon: Validation errors
+
+<Code size={25}>{`const isVerified = p\`{
+  name: string           # Name must be a string # 
+  & { length: > 7 }      # Length must be greater than 7 # 
+  , age: (Number & > 18) # Age must be numeric and over 18 #
+}\`.validate({
+  name: 'Fred',
+  age: 21
+}); // ["Length must be greater than 7"]`}</Code>
 
 ---
 
